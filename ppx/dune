@@ -1,5 +1,6 @@
 (library
  (name ppx_cmdliner)
+ (public_name ppx_cmdliner)
  (modules ppx_cmdliner)
  (kind ppx_rewriter)
  (libraries ppxlib cmdliner fmt)
