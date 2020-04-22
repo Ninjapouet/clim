@@ -11,19 +11,25 @@ include
       let infos =
         let docs = None in
         let doc = Some "prout" in
-        let env = None in Cmdliner.Arg.info ?docs ?doc ?env ["f"; "foo"] in
+        let docv = None in
+        let env = None in
+        Cmdliner.Arg.info ?docs ?doc ?docv ?env ["f"; "foo"] in
       let open Cmdliner.Arg in value & ((opt int 42) & infos)
     let bar_cmdliner_t =
       let infos =
         let docs = None in
         let doc = None in
-        let env = None in Cmdliner.Arg.info ?docs ?doc ?env ["b"; "bar"] in
+        let docv = None in
+        let env = None in
+        Cmdliner.Arg.info ?docs ?doc ?docv ?env ["b"; "bar"] in
       let open Cmdliner.Arg in value & (flag infos)
     let goo_cmdliner_t =
       let infos =
         let docs = None in
         let doc = None in
-        let env = None in Cmdliner.Arg.info ?docs ?doc ?env ["g"; "goo"] in
+        let docv = None in
+        let env = None in
+        Cmdliner.Arg.info ?docs ?doc ?docv ?env ["g"; "goo"] in
       let open Cmdliner.Arg in
         let open Cmdliner.Term in
           (const List.concat) $

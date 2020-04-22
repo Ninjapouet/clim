@@ -15,6 +15,12 @@ let label_doc_attribute = Attribute.declare
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
+let label_docv_attribute = Attribute.declare
+    "cmdliner.docv"
+    Attribute.Context.label_declaration
+    Ast_pattern.(single_expr_payload __)
+    (fun expr -> expr)
+
 let label_env_docs_attribute = Attribute.declare
     "cmdliner.env.docs"
     Attribute.Context.label_declaration
@@ -95,6 +101,7 @@ let type_version_attribute = Attribute.declare
 
 let attributes = [
   Attribute.T label_aka_attribute;
+  Attribute.T label_doc_attribute;
   Attribute.T label_doc_attribute;
   Attribute.T label_env_docs_attribute;
   Attribute.T label_env_doc_attribute;
@@ -195,12 +202,14 @@ let label_infos : label_declaration -> expression = fun label ->
   let aka = label_aka label in
   let docs = label_docs label in
   let doc = label_doc label in
+  let docv = opt ~loc:label.pld_loc @@ Attribute.get label_docv_attribute label in
   let env = label_env label in
   [%expr
     let docs = [%e docs] in
     let doc = [%e doc] in
+    let docv = [%e docv] in
     let env = [%e env] in
-    Cmdliner.Arg.info ?docs ?doc ?env [%e aka]]
+    Cmdliner.Arg.info ?docs ?doc ?docv ?env [%e aka]]
 
 let expr_opt : loc:Location.t -> expression option -> expression = fun ~loc e ->
   match e with
