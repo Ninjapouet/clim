@@ -16,3 +16,14 @@
  (homepage "https://github.com/Ninjapouet/ppx_cmdliner")
  (bug_reports "https://github.com/Ninjapouet/ppx_cmdliner/issues")
 )
+
+(package
+ (name ezcmdliner)
+ (synopsis "An easy interface to cmdliner")
+ (description "It simplifies the binary command line definition and composition")
+ (license "Apache 2.0")
+ (authors "Julien Blond <julien.blond@gmail.com>")
+ (maintainers "Julien Blond <julien.blond@gmail.com>")
+ (homepage "https://github.com/Ninjapouet/ppx_cmdliner")
+ (bug_reports "https://github.com/Ninjapouet/ppx_cmdliner/issues")
+)

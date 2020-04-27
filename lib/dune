@@ -1,0 +1,7 @@
+(library
+ (name ezcmdliner)
+ (public_name ezcmdliner)
+ (modules ezcmdliner)
+ (libraries cmdliner)
+ (preprocess (pps ppx_deriving.std))
+)
