@@ -16,9 +16,9 @@ let infos k ?docs ?docv ?doc ?env aka =
   let infos = Arg.info ?docs ?docv ?doc ?env aka in
   k infos
 
-let flag ?docs ?docv ?doc ?env aka : (bool, spec) arg =
+let flag ?docs ?doc ?env aka : (bool, spec) arg =
   let k info = Spec (false, Arg.flag info) in
-  infos k ?docs ?docv ?doc ?env aka
+  infos k ?docs ?doc ?env aka
 
 let opt ?docs ?docv ?doc ?env ?vopt ~conv ~default aka =
   let k info = Spec (default, Arg.opt ?vopt conv default info) in
@@ -28,13 +28,13 @@ let opt_all ?docs ?docv ?doc ?env ?vopt ~conv ~default aka =
   let k info = Spec (default, Arg.opt_all ?vopt conv default info) in
   infos k ?docs ?docv ?doc ?env aka
 
-let pos ?docs ?docv ?doc ?env ?rev ~conv ~default ~index aka =
+let pos ?docs ?docv ?doc ?env ?rev ~conv ~default ~index =
   let k info = Spec (default, Arg.pos ?rev index conv default info) in
-  infos k ?docs ?docv ?doc ?env aka
+  infos k ?docs ?docv ?doc ?env []
 
-let pos_all ?docs ?docv ?doc ?env ~conv ~default aka =
+let pos_all ?docs ?docv ?doc ?env ~conv ~default =
   let k info = Spec (default, Arg.pos_all conv default info) in
-  infos k ?docs ?docv ?doc ?env aka
+  infos k ?docs ?docv ?doc ?env []
 
 let value : ('a, spec) arg -> ('a, final) arg =
   function Spec (d, a) -> Arg (d, Arg.value a)
@@ -88,8 +88,10 @@ let term : 'a command -> ('a Term.t * Term.info) = fun cmd ->
       cmd.name in
   Term.(const cmd.cmd $ !(cmd.cfg)), info
 
-let run : 'a command -> unit = fun cmd ->
-  Term.exit @@ Term.eval (term cmd)
+let run : 'a command -> 'a = fun cmd ->
+  match Term.eval (term cmd) with
+  | `Ok v -> v
+  | r -> exit @@ Term.exit_status_of_result r
 
 
 let bool = Arg.bool
