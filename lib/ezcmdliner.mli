@@ -74,7 +74,7 @@
     previous example. There is no need to redefine the
     configuration, simply use the previous one:
     {[
-      let ext_cfg = cfg
+      let ext_cfg = from cfg
     ]}
     Then add the [bar] option:
     {[
@@ -216,6 +216,9 @@ type cfg
 
 (** Creates an empty configuration. *)
 val create : unit -> cfg
+
+(** [from cfg] creates a new configuration based on [cfg]. *)
+val from : cfg -> cfg
 
 (** [register cfg arg] registers the argument [arg] info [cfg] and
     returns a getter to the option's value. *)

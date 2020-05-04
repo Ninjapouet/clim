@@ -58,6 +58,8 @@ type cfg = unit Term.t ref
 
 let create () = ref (Term.const ())
 
+let from cfg = ref (!cfg)
+
 let register : cfg -> ('b, final) arg -> unit -> 'b = fun cfg (Arg (d, t)) ->
   let cell = ref d in
   let set v () = cell := v in
