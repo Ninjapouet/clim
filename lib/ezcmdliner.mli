@@ -157,18 +157,18 @@ val flag : ?docs:string -> ?doc:string -> ?env:string -> string list ->
     Optional arguments are the usual argument specified by a [-x] or [--xxx]
     notation on command line. *)
 
-(** [opt ~docs ~docv ~doc ~env ~vopt ~conv ~default aka]  defines a new
+(** [opt ~docs ~docv ~doc ~env ~vopt conv default aka]  defines a new
     optional argument whose names are given in [aka]. *)
 val opt : ?docs:string -> ?docv:string -> ?doc:string -> ?env:string ->
-  ?vopt:'a -> conv:'a conv -> default:'a -> string list ->
+  ?vopt:'a -> 'a conv -> 'a -> string list ->
   ('a, spec) arg
 
-(** [opt_all ~docs ~docv ~doc ~env ~vopt ~conv ~default aka] same as
+(** [opt_all ~docs ~docv ~doc ~env ~vopt conv default aka] same as
     {!opt} but gathers several invocations of the options into a list.
     For example, this is useful for include directory options used in
     many tools. *)
 val opt_all : ?docs:string -> ?docv:string -> ?doc:string -> ?env:string ->
-  ?vopt:'a -> conv:'a conv -> default:'a list -> string list ->
+  ?vopt:'a -> 'a conv -> 'a list -> string list ->
   ('a list, spec) arg
 
 
@@ -181,11 +181,11 @@ val opt_all : ?docs:string -> ?docv:string -> ?doc:string -> ?env:string ->
     and will be modified in near future so use it carefuly. *)
 
 val pos : ?docs:string -> ?docv:string -> ?doc:string -> ?env:string ->
-  ?rev:bool -> conv:'a conv -> default:'a -> index:int ->
+  ?rev:bool -> 'a conv -> 'a -> int ->
   ('a, spec) arg
 
 val pos_all : ?docs:string -> ?docv:string -> ?doc:string -> ?env:string ->
-  conv:'a conv -> default:'a list ->
+  'a conv -> 'a list ->
   ('a list, spec) arg
 
 (** {3 Contraints}

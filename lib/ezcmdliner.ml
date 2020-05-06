@@ -20,19 +20,19 @@ let flag ?docs ?doc ?env aka : (bool, spec) arg =
   let k info = Spec (false, Arg.flag info) in
   infos k ?docs ?doc ?env aka
 
-let opt ?docs ?docv ?doc ?env ?vopt ~conv ~default aka =
+let opt ?docs ?docv ?doc ?env ?vopt conv default aka =
   let k info = Spec (default, Arg.opt ?vopt conv default info) in
   infos k ?docs ?docv ?doc ?env aka
 
-let opt_all ?docs ?docv ?doc ?env ?vopt ~conv ~default aka =
+let opt_all ?docs ?docv ?doc ?env ?vopt conv default aka =
   let k info = Spec (default, Arg.opt_all ?vopt conv default info) in
   infos k ?docs ?docv ?doc ?env aka
 
-let pos ?docs ?docv ?doc ?env ?rev ~conv ~default ~index =
+let pos ?docs ?docv ?doc ?env ?rev conv default index =
   let k info = Spec (default, Arg.pos ?rev index conv default info) in
   infos k ?docs ?docv ?doc ?env []
 
-let pos_all ?docs ?docv ?doc ?env ~conv ~default =
+let pos_all ?docs ?docv ?doc ?env conv default =
   let k info = Spec (default, Arg.pos_all conv default info) in
   infos k ?docs ?docv ?doc ?env []
 
