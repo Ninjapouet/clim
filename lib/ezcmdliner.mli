@@ -286,6 +286,7 @@ val enum : (string * 'a) list -> 'a conv
 val file : string conv
 val dir : string conv
 val non_dir_file : string conv
+val option : ?none:string -> 'a conv -> 'a option conv
 val list : ?sep:char -> 'a conv -> 'a list conv
 val array : ?sep:char -> 'a conv -> 'a array conv
 val pair : ?sep:char -> 'a conv -> 'b conv -> ('a * 'b) conv

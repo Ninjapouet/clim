@@ -96,6 +96,7 @@ let run : 'a command -> 'a = fun cmd ->
   | r -> exit @@ Term.exit_status_of_result r
 
 
+let option ?none = Arg.some ?none
 let bool = Arg.bool
 let char = Arg.char
 let int = Arg.int
