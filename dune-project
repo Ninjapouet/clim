@@ -15,6 +15,11 @@
  (maintainers "Julien Blond <julien.blond@gmail.com>")
  (homepage "https://github.com/Ninjapouet/ppx_cmdliner")
  (bug_reports "https://github.com/Ninjapouet/ppx_cmdliner/issues")
+ (depends
+  (ppxlib (>= 0.9.0))
+  (fmt (>= 0.8.8))
+  (cmdliner (>= 1.0.4))
+  (ppx_deriving (>= 4.4.1)))
 )
 
 (package
