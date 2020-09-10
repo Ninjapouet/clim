@@ -6,8 +6,8 @@ description:
 maintainer: ["Julien Blond <julien.blond@gmail.com>"]
 authors: ["Julien Blond <julien.blond@gmail.com>"]
 license: "Apache 2.0"
-homepage: "https://github.com/Ninjapouet/ppx_cmdliner"
-bug-reports: "https://github.com/Ninjapouet/ppx_cmdliner/issues"
+homepage: "https://github.com/Ninjapouet/ezcmdliner"
+bug-reports: "https://github.com/Ninjapouet/ezcmdliner/issues"
 depends: [
   "dune" {>= "2.5"}
 ]
@@ -25,4 +25,4 @@ build: [
     "@doc" {with-doc}
   ]
 ]
-dev-repo: "git+https://github.com/Ninjapouet/ppx_cmdliner.git"
+dev-repo: "git+https://github.com/Ninjapouet/ezcmdliner.git"
