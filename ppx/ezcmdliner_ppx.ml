@@ -379,18 +379,18 @@ let expand_str :
   rec_flag * type_declaration list  ->
   structure =
   fun ~ctxt (_rec_flag, type_decl_list) ->
-  let omp_config = Expansion_context.Deriver.omp_config ctxt in
+  (* let omp_config = Expansion_context.Deriver.omp_config ctxt in *)
   let is_ocamldep_pass =
-    String.equal "ocamldep" omp_config.Migrate_parsetree.Driver.tool_name in
+    String.equal "ocamldep" (Expansion_context.Deriver.tool_name ctxt) in
   let loc = Expansion_context.Deriver.derived_item_loc ctxt in
   if is_ocamldep_pass then [] else
     List.map (expand_str_type_decl ~loc) type_decl_list |> List.concat
 
 
 let expand_sig ~ctxt _input_ast =
-  let omp_config = Expansion_context.Deriver.omp_config ctxt in
+  (* let omp_config = Expansion_context.Deriver.omp_config ctxt in *)
   let is_ocamldep_pass =
-    String.equal "ocamldep" omp_config.Migrate_parsetree.Driver.tool_name in
+    String.equal "ocamldep" (Expansion_context.Deriver.tool_name ctxt) in
   let loc = Expansion_context.Deriver.derived_item_loc ctxt in
   if is_ocamldep_pass then []
   else [%sig: val foo : int]

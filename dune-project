@@ -4,6 +4,8 @@
 
 (name ezcmdliner)
 
+(version "0.1.1")
+
 (source (github Ninjapouet/ezcmdliner))
 
 (package
@@ -15,6 +17,9 @@
  (maintainers "Julien Blond <julien.blond@gmail.com>")
  (homepage "https://github.com/Ninjapouet/ezcmdliner")
  (bug_reports "https://github.com/Ninjapouet/ezcmdliner/issues")
+ (depends
+  (cmdliner (>= 1.0.4))
+  (ezcmdliner-ppx :with-test))
 )
 
 (package
@@ -27,8 +32,7 @@
  (homepage "https://github.com/Ninjapouet/ezcmdliner")
  (bug_reports "https://github.com/Ninjapouet/ezcmdliner/issues")
  (depends
-  (ppxlib (>= 0.9.0))
+  (ppxlib (>= 0.14.0))
   (fmt (>= 0.8.8))
-  (cmdliner (>= 1.0.4))
-  (ppx_deriving (>= 4.4.1)))
+  (cmdliner (>= 1.0.4)))
 )

@@ -67,17 +67,34 @@ let register : cfg -> ('b, final) arg -> unit -> 'b = fun cfg (Arg (d, t)) ->
   fun () -> !cell
 
 type 'a command = {
-  cfg : cfg; [@default (create ())]
-  cmd : (unit -> 'a); [@main]
-  man_xrefs : Manpage.xref list; [@default []]
-  man : Manpage.block list; [@default []]
-  envs : Term.env_info list; [@default []]
-  doc : string; [@default ""]
-  version : string option; [@default None]
-  name : string; [@default (Filename.basename Sys.executable_name)]
-}[@@deriving make]
+  cfg : cfg;
+  cmd : (unit -> 'a);
+  man_xrefs : Manpage.xref list;
+  man : Manpage.block list;
+  envs : Term.env_info list;
+  doc : string;
+  version : string option;
+  name : string;
+}
 
-let command = make_command
+let command
+    ?(cfg = create ())
+    ?(man_xrefs = [])
+    ?(man = [])
+    ?(envs = [])
+    ?(doc = "")
+    ?(version = None)
+    ?(name = Filename.basename Sys.executable_name)
+    cmd = {
+  cfg;
+  cmd;
+  man_xrefs;
+  man;
+  envs;
+  doc;
+  version;
+  name;
+}
 
 
 let term : 'a command -> ('a Term.t * Term.info) = fun cmd ->
