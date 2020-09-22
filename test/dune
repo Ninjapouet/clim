@@ -1,4 +1,4 @@
 (executable
  (name pp)
  (modules pp)
- (libraries ezcmdliner-ppx ppxlib))
+ (libraries clim-ppx ppxlib))

@@ -9,7 +9,7 @@
     To define a new command line interface (CLI) to a function, you must
     create a new configuration storing the CLI parameters:
     {[
-      open Ezcmdliner
+      open Clim
       let cfg = create ()
     ]}
 
@@ -17,8 +17,8 @@
     {[
       let foo = register cfg @@ value @@ opt
           ~doc:"Foo parameter"
-          ~conv:string
-          ~default:"foo"
+          string
+          "foo"
           ["f"; "foo"]
     ]}
     This will add a optional string parameter [foo] with a default value
@@ -26,7 +26,8 @@
     [-f] or [--foo]. The main difference with [Cmdliner] is the
     [register] function which adds the parameter to [cfg] and returns
     a function whose type is [unit -> 'a] where ['a] depends on
-    [conv]. Here, [foo] is a [unit -> string] function and is
+    the given type specification. Here, [foo] is a [unit -> string]
+    function and is
     a getter to the foo parameter value.
 
     The function that need the [foo] value can use it:
@@ -61,12 +62,12 @@
     but doing so is boring and feels wrong. It feels wrong because
     argument terms are designed to be intermediate objects and all
     programmers (should) know that exposing such stuff is a bad thing
-    (even if not security issue is involved, it implies some kind of API
+    (even if no security issue is involved, it implies some kind of API
     noise).
 
     {2 Incremental CLI}
 
-    [Ezcmdliner] avoids this by abstracing the argument term and
+    [Clim] avoids this by abstracing the argument term and
     somehow cut the term definition in a lazy way to allow the
     programmer to specify its CLI in an incremental way.
 
@@ -80,8 +81,8 @@
     {[
       let bar = register ext_cfg @@ value @@ opt
           ~doc:"Bar parameter"
-          ~conv:int
-          ~default:0
+          int
+          0
           ["b"; "bar"]
     ]}
     And now, we can change the CLI behavior:
@@ -101,14 +102,14 @@
 
     {2 Lwt}
 
-    [Ezcmdliner] is fully compatible with Lwt. Simply give a Lwt thread
+    [Clim] is fully compatible with Lwt. Simply give a Lwt thread
     to {!command} to produce a ['a Lwt.t command] value. Running this
     command will produce a ['a Lwt.t] value that should be passed
     to [Lwt_main.run].
 
     {3 Partial CLI}
 
-    [Ezcmdliner] doesn't handle partial CLI evaluation to use sub-commands
+    [Clim] doesn't handle partial CLI evaluation to use sub-commands
     for now but it will come in near future.
 
     {1 API}

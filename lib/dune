@@ -1,6 +1,6 @@
 (library
- (name ezcmdliner)
- (public_name ezcmdliner)
- (modules ezcmdliner)
+ (name clim)
+ (public_name clim)
+ (modules clim)
  (libraries cmdliner)
 )
