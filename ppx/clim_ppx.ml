@@ -128,7 +128,7 @@ let rec ocaml_doc : attributes -> (string * Location.t) option = function
   | {attr_name = {txt = name; _};
      attr_payload =
        PStr [{pstr_desc = Pstr_eval ({
-           pexp_desc = Pexp_constant (Pconst_string (doc_str, _)); _}, _); _}];
+           pexp_desc = Pexp_constant (Pconst_string (doc_str, _, _)); _}, _); _}];
      attr_loc} :: others ->
     if name = "ocaml.doc" then
       Some (doc_str, attr_loc)
