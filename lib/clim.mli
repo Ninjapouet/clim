@@ -1,136 +1,4 @@
-(** Easier interface to Cmdliner.
-
-    [Cmdliner] is a great command line factory but composing binaries
-    definitions is quite painful. This library adds a small layer
-    upon [Cmdliner] to target this issue.
-
-    {1 Quickstart}
-
-    To define a new command line interface (CLI) to a function, you must
-    create a new configuration storing the CLI parameters:
-    {[
-      open Clim
-      let cfg = create ()
-    ]}
-
-    Then you can add parameters in a quite similar way of [Cmdliner]:
-    {[
-      let foo = register cfg @@ value @@ opt
-          ~doc:"Foo parameter"
-          string
-          "foo"
-          ["f"; "foo"]
-    ]}
-    This will add a optional string parameter [foo] with a default value
-    ["foo"] which will be customizable through the CLI with options
-    [-f] or [--foo]. The main difference with [Cmdliner] is the
-    [register] function which adds the parameter to [cfg] and returns
-    a function whose type is [unit -> 'a] where ['a] depends on
-    the given type specification. Here, [foo] is a [unit -> string]
-    function and is
-    a getter to the foo parameter value.
-
-    The function that need the [foo] value can use it:
-    {[
-      let main () = Format.printf "foo = %s@." (foo ())
-    ]}
-    and we can use it to define the full CLI:
-    {[
-      let foo_cmd = command ~cfg ~doc:"Foo printing." main
-    ]}
-    [foo_cmd] represents the CLI specification but not the CLI
-    execution. To execute this command, you must use the run
-    function:
-    {[
-      let () = run foo_cmd
-    ]}
-
-    {1 Details}
-
-    The main motivation for this library is concerning modularity
-    and removing all the boilerplate code needed to define a nice CLI.
-    [Cmdliner]
-    do remove this boilerplate code for the most part but in some
-    cases where modularity and some incremental CLI definition
-    is needed, [Cmdiner] can be painful.
-
-    As you can see in the {!Quickstart} section, defining new command
-    from scratch is quite easy. But now, imagine you want to extend
-    this CLI with new parameters or change a bit the behavior
-    of the underlying command. Of course, this can be done with
-    [Cmdliner] by proper code organization and exposing argument terms,
-    but doing so is boring and feels wrong. It feels wrong because
-    argument terms are designed to be intermediate objects and all
-    programmers (should) know that exposing such stuff is a bad thing
-    (even if no security issue is involved, it implies some kind of API
-    noise).
-
-    {2 Incremental CLI}
-
-    [Clim] avoids this by abstracing the argument term and
-    somehow cut the term definition in a lazy way to allow the
-    programmer to specify its CLI in an incremental way.
-
-    For exemple, suppose you want to add a [bar] option to the
-    previous example. There is no need to redefine the
-    configuration, simply use the previous one:
-    {[
-      let ext_cfg = from cfg
-    ]}
-    Then add the [bar] option:
-    {[
-      let bar = register ext_cfg @@ value @@ opt
-          ~doc:"Bar parameter"
-          int
-          0
-          ["b"; "bar"]
-    ]}
-    And now, we can change the CLI behavior:
-    {[
-      let bar_cmd = {
-        foo_cmd with
-        cmd = (fun () ->
-            foo_cmd.cmd ();
-            let b = bar () in
-            Format.printf "square(bar) = %i@." (b * b));
-        doc = foo_cmd ^ " Prints also the square of bar parameter.";
-      }
-      let () = run bar_cmd
-    ]}
-    As you can see, running the binary will print the [foo] value
-    but also the square of [bar].
-
-    {2 Lwt}
-
-    [Clim] is fully compatible with Lwt. Simply give a Lwt thread
-    to {!command} to produce a ['a Lwt.t command] value. Running this
-    command will produce a ['a Lwt.t] value that should be passed
-    to [Lwt_main.run].
-
-    {3 Partial CLI}
-
-    [Clim] doesn't handle partial CLI evaluation to use sub-commands
-    for now but it will come in near future.
-
-    {1 API}
-
-    There are three concepts in this library: arguments, configurations
-    and commands.
-
-    {2 Arguments}
-
-    Arguments are the CLI parameters which are roughly split in three
-    sorts: flags, optional parameters and positional parameters. All
-    of them are represented by the {!arg} type and follows the [Cmdliner]
-    usual specification in a bit more concise way.
-
-    For more information about various labelled aguments to {!flag} {!opt}
-    and other argument makers, see the [Cmdliner.Arg] documentation. There
-    are small differences though: useless parameters don't appear in
-    related arguments and environment variables take their documentation
-    stuff from their related argument (in [Cmdliner] they can have a
-    distinct documentation).
-*)
+(** Command Line Interface Maker *)
 
 (** Converter type from [Cmdliner]. *)
 type 'a conv = 'a Cmdliner.Arg.conv
@@ -294,3 +162,31 @@ val pair : ?sep:char -> 'a conv -> 'b conv -> ('a * 'b) conv
 val t2 : ?sep:char -> 'a conv -> 'b conv -> ('a * 'b) conv
 val t3 : ?sep:char -> 'a conv -> 'b conv -> 'c conv -> ('a * 'b * 'c) conv
 val t4 : ?sep:char -> 'a conv -> 'b conv -> 'c conv -> 'd conv -> ('a * 'b * 'c * 'd) conv
+
+
+(** The Object-Oriented CLI definition *)
+class virtual ['r] cli : object
+
+  (** [arg a k] adds the argument specification [a] to the CLI and
+      calls [k] on its final value. *)
+  method arg : 'a. ('a, final) arg -> ('a -> unit) -> unit
+
+  (** [set a r] adds the argument specification [a] to the CLI and
+      sets the reference with its final value. *)
+  method set : 'a. ('a, final) arg -> 'a ref -> unit
+
+  (** Entrypoint definition. *)
+  method virtual entrypoint : unit -> 'r
+
+  (** Inherted {!Cmdliner} definitions. *)
+  method man_xrefs : Cmdliner.Manpage.xref list
+  method man : Cmdliner.Manpage.block list
+  method envs : Cmdliner.Term.env_info list
+  method doc : string
+  method version : string option
+  method name : string
+  method term : 'r Cmdliner.Term.t * Cmdliner.Term.info
+
+  (** Runs the entrypoint according to the CLI definition. *)
+  method run : 'r
+end

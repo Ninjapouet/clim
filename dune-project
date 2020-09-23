@@ -1,10 +1,11 @@
 (lang dune 2.7)
+(cram enable)
 
 (generate_opam_files true)
 
 (name clim)
 
-(version "0.2.0")
+(version "0.3.0")
 
 (source (github Ninjapouet/clim))
 
@@ -31,7 +32,7 @@
  (homepage "https://github.com/Ninjapouet/clim")
  (bug_reports "https://github.com/Ninjapouet/clim/issues")
  (depends
-  (clim (= 0.2.0))
+  (clim (= 0.3.0))
   (ppxlib (>= 0.14.0))
   (fmt (>= 0.8.8))
   (cmdliner (>= 1.0.4)))

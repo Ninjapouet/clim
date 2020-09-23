@@ -132,3 +132,44 @@ let pair = Arg.pair
 let t2 = Arg.t2
 let t3 = Arg.t3
 let t4 = Arg.t4
+
+
+class virtual ['r] cli = object(self)
+
+  val mutable cmdliner_term = Term.const ()
+
+  method arg : 'a. ('a, final) arg -> ('a -> unit) -> unit = fun (Arg (_, t)) k ->
+    let f v () = k v in
+    cmdliner_term <- Term.(const f $ t $ cmdliner_term)
+
+  method set : 'a. ('a, final) arg -> 'a ref -> unit = fun arg r ->
+    self#arg arg (fun v -> r := v)
+
+  method virtual entrypoint : unit -> 'r
+
+  method man_xrefs : Manpage.xref list = []
+
+  method man : Manpage.block list= []
+
+  method envs : Term.env_info list = []
+
+  method doc = ""
+
+  method version : string option = None
+
+  method name = Filename.basename Sys.executable_name
+
+  method term : ('r Term.t * Term.info) =
+    let info = Term.info
+        ~man_xrefs:self#man_xrefs
+        ~man:self#man
+        ~envs:self#envs
+        ~doc:self#doc
+        ?version:self#version
+        self#name in
+    Term.(const self#entrypoint $ cmdliner_term), info
+
+  method run : 'r = match Term.eval self#term with
+    | `Ok v -> v
+    | r -> exit @@ Term.exit_status_of_result r
+end
