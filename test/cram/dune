@@ -1,0 +1,8 @@
+
+(executable
+ (name foo)
+ (modules foo)
+ (libraries clim fmt))
+
+(cram
+ (deps foo.exe))

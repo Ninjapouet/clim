@@ -1,8 +1,0 @@
-(library
- (name clim_ppx)
- (public_name clim-ppx)
- (modules clim_ppx)
- (kind ppx_rewriter)
- (libraries ppxlib cmdliner fmt)
- (preprocess (pps ppxlib.metaquot))
-)
