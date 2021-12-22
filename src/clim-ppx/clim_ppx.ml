@@ -4,97 +4,97 @@ open Ppxlib
 
 
 let label_aka_attribute = Attribute.declare
-    "cmdliner.aka"
+    "clim.aka"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_doc_attribute = Attribute.declare
-    "cmdliner.doc"
+    "clim.doc"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_docv_attribute = Attribute.declare
-    "cmdliner.docv"
+    "clim.docv"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_env_docs_attribute = Attribute.declare
-    "cmdliner.env.docs"
+    "clim.env.docs"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_env_doc_attribute = Attribute.declare
-    "cmdliner.env.doc"
+    "clim.env.doc"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_env_attribute = Attribute.declare
-    "cmdliner.env"
+    "clim.env"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_docs_attribute = Attribute.declare
-    "cmdliner.docs"
+    "clim.docs"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_default_attribute = Attribute.declare
-    "cmdliner.default"
+    "clim.default"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_pos_attribute = Attribute.declare
-    "cmdliner.pos"
+    "clim.pos"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_enum_attribute = Attribute.declare
-    "cmdliner.enum"
+    "clim.enum"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let label_sep_attribute = Attribute.declare
-    "cmdliner.sep"
+    "clim.sep"
     Attribute.Context.label_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let type_xrefs_attribute = Attribute.declare
-    "cmdliner.xrefs"
+    "clim.xrefs"
     Attribute.Context.type_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let type_man_attribute = Attribute.declare
-    "cmdliner.man"
+    "clim.man"
     Attribute.Context.type_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let type_envs_attribute = Attribute.declare
-    "cmdliner.envs"
+    "clim.envs"
     Attribute.Context.type_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let type_doc_attribute = Attribute.declare
-    "cmdliner.doc"
+    "clim.doc"
     Attribute.Context.type_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
 
 let type_version_attribute = Attribute.declare
-    "cmdliner.version"
+    "clim.version"
     Attribute.Context.type_declaration
     Ast_pattern.(single_expr_payload __)
     (fun expr -> expr)
@@ -239,7 +239,7 @@ let rec converter : sep:expression -> core_type -> expression = fun ~sep typ ->
         [%e converter ~sep c] [%e converter ~sep d]]
   | _ ->
     Location.raise_errorf ~loc
-      "cmdliner: don't know what to do with %a"
+      "clim: don't know what to do with %a"
       Pprintast.core_type typ
 
 let label_conv : label_declaration -> expression = fun label ->
@@ -296,7 +296,7 @@ let type_env ~loc td =
         [%expr Term.env_info ?docs:[%e docs] ?doc:[%e doc] [%e name] :: [%e envs t]]
       | e ->
         Location.raise_errorf ~loc
-          "cmdliner: don't know what to do with %a"
+          "clim: don't know what to do with %a"
           Pprintast.expression e in
     [%expr Some [%e envs l]]
 
@@ -359,7 +359,7 @@ let expand_str_type_decl : loc:Location.t -> type_declaration -> structure =
         let mk = [%e mk_exp] in
         Cmdliner.Term.([%e final_app])
 
-      let cmdliner f =
+      let clim f =
         let name = Filename.basename Sys.executable_name in
         let open Cmdliner in
         let info = Term.info name
@@ -409,4 +409,4 @@ let cmdliner_deriver =
   Deriving.add
     ~str_type_decl:str_type_decl_generator
     ~sig_type_decl:sig_type_decl_generator
-    "cmdliner"
+    "clim"

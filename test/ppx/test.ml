@@ -4,7 +4,7 @@ type t = {
   bar : bool;
   goo : string list; [@sep ':']
 }
-[@@deriving cmdliner]
+[@@deriving clim]
 [@@xrefs [`Main]]
 [@@envs ["PLOP", Some "It rules!", None]]
 [@@version "4.2"]
@@ -12,4 +12,4 @@ type t = {
 
 let f t = t.foo + 1
 
-let _ = cmdliner f
+let _ = clim f

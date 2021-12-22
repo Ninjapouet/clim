@@ -2,7 +2,7 @@ type t =
   {
   foo: int [@default 42][@ocaml.doc " prout "];
   bar: bool ;
-  goo: string list [@sep ':']}[@@ocaml.doc " Coucou "][@@deriving cmdliner]
+  goo: string list [@sep ':']}[@@ocaml.doc " Coucou "][@@deriving clim]
 [@@xrefs [`Main]][@@envs [("PLOP", (Some "It rules!"), None)]][@@version
                                                                 "4.2"]
 include
@@ -38,7 +38,7 @@ include
       let mk foo bar goo = { foo; bar; goo } in
       let open Cmdliner.Term in
         (((const mk) $ foo_cmdliner_t) $ bar_cmdliner_t) $ goo_cmdliner_t
-    let cmdliner f =
+    let clim f =
       let name = Filename.basename Sys.executable_name in
       let open Cmdliner in
         let info =
@@ -51,4 +51,4 @@ include
         Term.exit @@ (Term.eval (term_t, info))
   end[@@ocaml.doc "@inline"][@@merlin.hide ]
 let f t = t.foo + 1
-let _ = cmdliner f
+let _ = clim f
