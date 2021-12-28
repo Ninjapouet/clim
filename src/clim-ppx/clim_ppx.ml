@@ -1,5 +1,5 @@
 open Ppxlib
-
+module Builder = Ast_builder.Default
 
 
 
@@ -237,6 +237,10 @@ let rec converter : sep:expression -> core_type -> expression = fun ~sep typ ->
     [%expr t4
         [%e converter ~sep a] [%e converter ~sep b]
         [%e converter ~sep c] [%e converter ~sep d]]
+  | {ptyp_desc = Ptyp_constr ({txt = Ldot (lid, "t"); loc} as cstr, []); _} ->
+    let parser = Builder.pexp_ident ~loc {cstr with txt = Ldot (lid, "parser")} in
+    let printer = Builder.pexp_ident ~loc {cstr with txt = Ldot (lid, "printer")} in
+    [%expr conv ([%e parser], [%e printer])]
   | _ ->
     Location.raise_errorf ~loc
       "clim: don't know what to do with %a"
