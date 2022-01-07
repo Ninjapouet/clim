@@ -366,6 +366,18 @@ let expand_str_type_decl : loc:Location.t -> type_declaration -> structure =
       let clim f =
         let name = Filename.basename Sys.executable_name in
         let open Cmdliner in
+
+        let setup_log style_renderer level =
+          Fmt_tty.setup_std_outputs ?style_renderer ();
+          Logs.set_level level;
+          Logs.set_reporter (Logs_fmt.reporter ());
+          () in
+
+        let setup_log =
+          Term.(const setup_log $ Fmt_cli.style_renderer () $ Logs_cli.level ()) in
+
+        let wrap a () = f a in
+
         let info = Term.info name
             ?man_xrefs:[%e xrefs]
             ?man:[%e man]
@@ -373,7 +385,7 @@ let expand_str_type_decl : loc:Location.t -> type_declaration -> structure =
             ?doc:[%e doc]
             ?version:[%e version]
             ~exits:Term.default_exits in
-        let term_t = Term.(const f $ [%e etype_id]) in
+        let term_t = Term.(const wrap $ [%e etype_id] $ setup_log) in
         Term.exit @@ Term.eval (term_t, info)
     ]
   | _ -> []

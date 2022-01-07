@@ -8,11 +8,11 @@
  (alias runtest)
  (action (diff test.expected.ml test.actual.ml)))
 
-; (test
-;  (name test)
-;  (modules test)
-;  (libraries cmdliner)
-;  (preprocess (pps clim-ppx)))
+(test
+ (name test)
+ (modules test)
+ (libraries fmt fmt.tty fmt.cli logs.fmt logs.cli logs cmdliner)
+ (preprocess (pps clim-ppx)))
 
 (executable
  (name pp)

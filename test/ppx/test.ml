@@ -12,7 +12,7 @@ type t = {
   foo : int; [@default 42] (** prout *)
   bar : bool;
   goo : string list; [@sep ':']
-  constr : M.t;
+  constr : M.t; [@default 24]
 }
 [@@deriving clim]
 [@@xrefs [`Main]]
