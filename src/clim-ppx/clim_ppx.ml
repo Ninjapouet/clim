@@ -426,3 +426,22 @@ let cmdliner_deriver =
     ~str_type_decl:str_type_decl_generator
     ~sig_type_decl:sig_type_decl_generator
     "clim"
+
+let app =
+  Extension.V3.declare
+    "log"
+    Extension.Context.expression
+    Ast_pattern.(single_expr_payload (pexp_apply __ __))
+    (fun ~ctxt f args ->
+      let loc = Expansion_context.Extension.extension_point_loc ctxt in
+      let call = Ast_builder.Default.(pexp_apply ~loc (evar ~loc "m")) args in
+        [%expr Logs.([%e f]) (fun m -> [%e call])])
+
+let rules = List.map Context_free.Rule.extension [
+  app;
+]
+
+let () =
+  Driver.register_transformation
+    ~rules
+    "clim"

@@ -20,6 +20,8 @@ type t = {
 [@@version "4.2"]
 
 
-let f t = t.foo + 1
+let f t = 
+  [%log info "pouet %s" "foo"];
+  t.foo + 1
 
 let _ = clim f

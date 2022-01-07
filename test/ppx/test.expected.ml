@@ -80,5 +80,5 @@ include
         let term_t = let open Term in ((const wrap) $ cmdliner_t) $ setup_log in
         Term.exit @@ (Term.eval (term_t, info))
   end[@@ocaml.doc "@inline"][@@merlin.hide ]
-let f t = t.foo + 1
+let f t = ((let open Logs in info)) (fun m -> m "pouet %s" "foo"); t.foo + 1
 let _ = clim f
